@@ -12,7 +12,7 @@ app.use(express.json());
 // Connect to MongoDB using the SRV connection string
 mongoose
   .connect(
-    `mongodb+srv://admin:admin@cluster0.lc2b5bl.mongodb.net/spice-mania?retryWrites=true&w=majority&appName=Cluster0`
+    `mongodb+srv://admin:admin@cluster0.lc2b5bl.mongodb.net/spice-mania`
   )
   .then(() => {
     console.log("Connected to MongoDB");
