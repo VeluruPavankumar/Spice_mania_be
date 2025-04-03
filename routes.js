@@ -5,6 +5,7 @@ const path = require("path");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const { CLIENT_RENEG_LIMIT } = require("tls");
 
 const secret_key = "raja-spicemania-owner#1212&bhuvi*iumn@1234";
 
@@ -47,7 +48,7 @@ router.post("/add-recipe", authMiddleware, async (req, res) => {
 router.get("/recipes", async (req, res) => {
   try {
     const recipes = await Recipe.find().lean();
-    console.log(recipes);
+    // console.log(recipes);
     res.json(recipes);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -57,12 +58,15 @@ router.get("/recipes", async (req, res) => {
 // Route to get a specific recipe by ID
 router.get("/recipes/:id", async (req, res) => {
   try {
-    const recipe = await Recipe.findById(req.params.id);
+    // console.log("id",req.params.id);
+    const recipe = await Recipe.findOne({_id:req.params.id});
     if (!recipe) {
       return res.status(404).json({ message: "Recipe not found" });
     }
+    // console.log("recipe",recipe);
     res.json(recipe);
   } catch (err) {
+    console.log("recipe",err);
     res.status(500).json({ message: err.message });
   }
 });
@@ -170,13 +174,14 @@ router.post("/login", async (req, res) => {
 router.post("/addfav/:id", authMiddleware, async (req, res) => {
   try {
     const recipeId = req.params.id;
-    console.log(req.user);
+    console.log(req.user,recipeId);
+
     const user = await User.findById(req.user._id);
 
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    const index = user.savedRecipes.indexOf(recipeId);
+    const index = user.savedRecipes.indexOf((id) => id === recipeId);
     if (index === -1) {
       // If recipeId not found in savedRecipes, add it
       user.savedRecipes.push(recipeId);

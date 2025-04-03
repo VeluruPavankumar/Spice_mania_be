@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 // Recipe Schema
 const recipeSchema = new mongoose.Schema({
+  _id: Number,
   title: String,
   image: String,
   time: Number,
@@ -30,7 +31,7 @@ const userSchema = new mongoose.Schema({
   password: String,
   savedRecipes: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Number,
       ref: "Recipe",
     },
   ],
