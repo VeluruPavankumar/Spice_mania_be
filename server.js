@@ -5,14 +5,14 @@ const routes = require("./routes");
 const cors = require("cors"); // Import the cors middleware
 const app = express();
 const PORT = process.env.PORT || 5000;
-
+require("dotenv").config();
 app.use(cors());
 app.use(express.json());
 
 // Connect to MongoDB using the SRV connection string
 mongoose
   .connect(
-    `mongodb+srv://admin:admin@cluster0.lc2b5bl.mongodb.net/spice-mania`
+    `${process.env.DB_URL}`
   )
   .then(() => {
     console.log("Connected to MongoDB");

@@ -46,7 +46,8 @@ router.post("/add-recipe", authMiddleware, async (req, res) => {
 // Route to get all recipes
 router.get("/recipes", async (req, res) => {
   try {
-    const recipes = await Recipe.find();
+    const recipes = await Recipe.find().lean();
+    console.log(recipes);
     res.json(recipes);
   } catch (err) {
     res.status(500).json({ message: err.message });
